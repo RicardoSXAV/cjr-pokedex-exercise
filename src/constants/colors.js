@@ -1,4 +1,4 @@
-const colors = {
+export const colors = {
   bug: "#7ED578",
   electric: "#FFF34B",
   fairy: "#FF7EE5",
@@ -18,4 +18,3 @@ const colors = {
   dragon: "#43372D",
 }
 
-module.exports = { colors}
