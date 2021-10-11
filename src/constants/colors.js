@@ -11,10 +11,9 @@ export const colors = {
   ice: "#AEE3FB",
   normal: "#D7DBA8",
   poison: "#CE52F9",
-  psychic: "#FFC157",
+  psychic: "#F85888",
   rock: "#757575",
   steel: "#A1A1A1",
   water: "#7192FF",
   dragon: "#43372D",
-}
-
+};

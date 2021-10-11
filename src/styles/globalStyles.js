@@ -1,5 +1,5 @@
-import { createGlobalStyle }  from 'styled-components';
-import { colors } from '../constants/colors'
+import { createGlobalStyle } from "styled-components";
+import { colors } from "../constants/colors";
 
 export default createGlobalStyle`
 
@@ -8,15 +8,14 @@ export default createGlobalStyle`
   padding: 0;
   box-sizing: border-box;
 }
-html, body, #root, h1 {
-  color: black;
+
+html, body, #root {
+  background-color: #454545;
 }
-// *, button, input {
-//   font-family: 'Roboto', sans-serif;
-//   border: 0;
-//   outline: 0;
-// }
 
-
-
-`
+*, button, input {
+  font-family: 'Poppins', sans-serif;
+  border: 0;
+  outline: 0;
+}
+`;

@@ -1,61 +1,82 @@
-import axios from 'axios'
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { useEffect, useState } from "react";
+import { Route, Switch } from "react-router";
+import axios from "axios";
+import styled from "styled-components";
+
+import GlobalStyles from "./styles/GlobalStyles";
+
+import Home from "./pages/Home";
 
 import { Card } from "./components/Card";
-import Navbar from './components/Navbar';
-import Pagination from './components/Pagination';
-import GlobalStyles from './styles/globalStyles';
+import Navbar from "./components/Navbar";
+import Pagination from "./components/Pagination";
 
 function App() {
-  const [pokemonListData, setPokemonListData] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
+  const [pokemonList, setPokemonList] = useState({});
+  const [userData, setUserData] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentUser, setCurrentUser] = useState("");
+
   useEffect(() => {
+    setPokemonList({});
+
+    const url = `https://pokedex20201.herokuapp.com/pokemons?page=${currentPage}`;
     async function getData() {
-      const data = await axios.get(url)
-      setPokemonListData(data.data)
-
-      console.log(pokemonListData.data)
-
+      const data = await axios.get(url);
+      setPokemonList(data.data);
     }
-    const url = `https://pokedex20201.herokuapp.com/pokemons?page=${currentPage}`
-    getData()
-  }, [currentPage])
+    getData();
 
-  const Container = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    align-self: center;
-  ` 
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
+  useEffect(() => {
+    const registerUrl = "https://pokedex20201.herokuapp.com/users";
+    const getDataUrl = `https://pokedex20201.herokuapp.com/users/${currentUser}`;
+
+    async function registerUser() {
+      await axios
+        .post(registerUrl, {
+          username: currentUser,
+        })
+        .then((response) => console.log(response));
+    }
+
+    async function getUserData() {
+      const data = await axios.get(getDataUrl);
+
+      setUserData(data);
+    }
+
+    if (currentUser) {
+      registerUser();
+      getUserData();
+    }
+  }, [currentUser]);
+
   return (
-    
     <>
-    <Navbar />
-    <Container>
-
- 
-    {
-      pokemonListData.data?.map(pokemon => 
-      <Card 
-        key={pokemon.id}
-        name={pokemon.name} 
-        kind={pokemon.kind} 
-        image_url={pokemon.image_url}  
+      <Navbar
+        currentUser={currentUser}
+        setCurrentUser={setCurrentUser}
+        setUserData={setUserData}
       />
-      )
-    }
-       </Container>
-    <Pagination
-      totalPages={pokemonListData.size}
-      currentPage={currentPage}
-      setCurrentPage ={setCurrentPage}
-    />
-    <GlobalStyles />
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={() => (
+            <Home
+              pokemonList={pokemonList}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          )}
+        />
+      </Switch>
+      <GlobalStyles />
     </>
-
   );
 }
 
 export default App;
-
-
