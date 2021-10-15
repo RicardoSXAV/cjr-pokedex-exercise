@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-
+import { HiHeart, HiOutlineHeart } from 'react-icons/hi'
 import { colors } from "../constants/colors";
 import capitalizeString from "../helpers/capitalizeString";
 
@@ -78,13 +78,15 @@ const Box = styled.div`
   }
 `;
 
-export default function Card({ id, name, kind, image_url }) {
+export default function Card({ id, name, kind, image_url, liked, unlikePokemon, likePokemon }) {
   const kindArray = kind.includes(";") ? kind.split(";") : [kind];
 
-  const history = useHistory();
 
   return (
-    <Box kind={kind} onClick={() => history.push(`/${name}`)}>
+    <Box kind={kind}>
+      <div>
+        {liked ? <HiHeart onClick={() => unlikePokemon(name, id)} /> : <HiOutlineHeart onClick={() => likePokemon(name, id)} />}
+      </div>
       <h1>{capitalizeString(name)}</h1>
       <div className="kind-line">
         {kindArray.map((kind) => (

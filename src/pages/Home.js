@@ -33,8 +33,8 @@ const LoadingCard = styled.div`
   animation: loading 1s infinite 1s;
 `;
 
-export default function Home({ pokemonList, currentPage, setCurrentPage }) {
-  console.log("pk", pokemonList);
+export default function Home({ pokemonList, currentPage, setCurrentPage, userData, likedPokemons, unlikePokemon, likePokemon }) {
+
   return (
     <>
       {JSON.stringify(pokemonList) !== "{}" ? (
@@ -42,10 +42,13 @@ export default function Home({ pokemonList, currentPage, setCurrentPage }) {
           <Container>
             {pokemonList.data?.map((pokemon) => (
               <Card
-                key={pokemon.id}
+                id={pokemon.id}
                 name={pokemon.name}
                 kind={pokemon.kind}
                 image_url={pokemon.image_url}
+                liked={likedPokemons.includes(pokemon.id)}
+                unlikePokemon={unlikePokemon}
+                likePokemon={likePokemon}
               />
             ))}
           </Container>
