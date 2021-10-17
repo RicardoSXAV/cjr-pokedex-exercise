@@ -26,6 +26,16 @@ function App() {
 
     const newArray = likedPokemons.filter((pokemonId) => pokemonId !== id);
     setLikedPokemons(newArray);
+
+    const getDataUrl = `https://pokedex20201.herokuapp.com/users/${currentUser}`;
+
+    async function getUserData() {
+      const data = await axios.get(getDataUrl);
+
+      setUserData(data.data);
+      setLikedPokemons(data?.data?.pokemons?.map((pokemon) => pokemon.id));
+    }
+    getUserData();
   }
 
   async function likePokemon(pokemonName, id) {
@@ -35,6 +45,16 @@ function App() {
 
     const newArray = [...likedPokemons, id];
     setLikedPokemons(newArray);
+
+    const getDataUrl = `https://pokedex20201.herokuapp.com/users/${currentUser}`;
+
+    async function getUserData() {
+      const data = await axios.get(getDataUrl);
+
+      setUserData(data.data);
+      setLikedPokemons(data?.data?.pokemons?.map((pokemon) => pokemon.id));
+    }
+    getUserData();
   }
 
   useEffect(() => {
