@@ -49,6 +49,19 @@ const PaginationWrapper = styled.div`
     color: white;
     user-select: none;
   }
+
+  // Mobile Adaptation
+
+  @media (max-width: 900px) {
+    flex-wrap: wrap;
+    padding: 1rem;
+  }
+
+  @media (max-width: 589px) {
+    p {
+      display: none;
+    }
+  }
 `;
 
 const Button = styled.button`
@@ -80,6 +93,40 @@ const Button = styled.button`
     box-shadow: none;
     filter: brightness(0.8);
   }
+
+  // Mobile Adaptation
+
+  @media (max-width: 900px) {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0.5rem;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 589px) {
+    display: none;
+  }
+`;
+
+const PaginationButton = styled.button`
+padding: 0.5rem 1rem;
+
+font-weight: 600;
+  color: white;
+ border-radius: 12px;
+    background: linear-gradient(
+      0deg,
+      rgba(34, 193, 195, 1) 0%,
+      rgba(45, 253, 88, 1) 100%
+    );
+    box-shadow: 0px 8px 20px 3px rgba(0, 0, 0, 0.24);
+
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      cursor: pointer;
+      filter: brightness(1.2);
+    }
 `;
 
 export default function Pagination(props) {
@@ -140,13 +187,17 @@ export default function Pagination(props) {
 
   return (
     <PaginationWrapper>
-      <MdKeyboardArrowLeft
-        id="pagination-arrow"
-        color="white"
-        onClick={() =>
-          props.currentPage > 1 && props.setCurrentPage(props.currentPage - 1)
-        }
-      />
+      {window.innerWidth > 589 ? (
+        <MdKeyboardArrowLeft
+          id="pagination-arrow"
+          color="white"
+          onClick={() =>
+            props.currentPage > 1 && props.setCurrentPage(props.currentPage - 1)
+          }
+        />
+      ) : (
+        <PaginationButton>Anterior</PaginationButton>
+      )}
 
       {arrayOfPages.map((number, index) => (
         <>
@@ -176,14 +227,16 @@ export default function Pagination(props) {
         </>
       ))}
 
-      <MdKeyboardArrowRight
-        id="pagination-arrow"
-        color="white"
-        onClick={() =>
-          props.currentPage < props.totalPages &&
-          props.setCurrentPage(props.currentPage + 1)
-        }
-      />
+      {window.innerWidth > 589 && (
+        <MdKeyboardArrowRight
+          id="pagination-arrow"
+          color="white"
+          onClick={() =>
+            props.currentPage < props.totalPages &&
+            props.setCurrentPage(props.currentPage + 1)
+          }
+        />
+      )}
     </PaginationWrapper>
   );
 }

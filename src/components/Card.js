@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import { HiHeart, HiOutlineHeart } from 'react-icons/hi'
+import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 import { colors } from "../constants/colors";
 import capitalizeString from "../helpers/capitalizeString";
 
@@ -78,15 +78,65 @@ const Box = styled.div`
   }
 `;
 
-export default function Card({ id, name, kind, image_url, liked, unlikePokemon, likePokemon }) {
-  const kindArray = kind.includes(";") ? kind.split(";") : [kind];
+const IconDiv = styled.button`
+  position: absolute;
+  display: flex;
+  padding: 1rem;
+  font-size: 3rem;
 
+  top: 80%;
+  left: -10%;
+  z-index: 2;
+
+  color: red;
+  background: linear-gradient(
+    90deg,
+    rgba(181, 203, 208, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  border-radius: 50%;
+  box-shadow: 0px 8px 20px 3px rgba(0, 0, 0, 0.24);
+
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(1.2);
+  }
+
+  &:active {
+    transition: all 0.1s ease-in-out;
+    box-shadow: none;
+    filter: brightness(0.8);
+  }
+`;
+
+export default function Card({
+  id,
+  name,
+  kind,
+  image_url,
+  liked,
+  unlikePokemon,
+  likePokemon,
+  currentUser,
+}) {
+  const kindArray = kind.includes(";") ? kind.split(";") : [kind];
 
   return (
     <Box kind={kind}>
-      <div>
-        {liked ? <HiHeart onClick={() => unlikePokemon(name, id)} /> : <HiOutlineHeart onClick={() => likePokemon(name, id)} />}
-      </div>
+      {currentUser && (
+        <IconDiv>
+          {liked ? (
+            <HiHeart
+              className="heart"
+              onClick={() => unlikePokemon(name, id)}
+            />
+          ) : (
+            <HiOutlineHeart onClick={() => likePokemon(name, id)} />
+          )}
+        </IconDiv>
+      )}
       <h1>{capitalizeString(name)}</h1>
       <div className="kind-line">
         {kindArray.map((kind) => (

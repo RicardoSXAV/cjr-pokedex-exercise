@@ -8,7 +8,6 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 100%;
 
   padding-top: 8rem;
 `;
@@ -34,38 +33,35 @@ const LoadingCard = styled.div`
   animation: loading 1s infinite 1s;
 `;
 
-export default function Home({
-  pokemonList,
-  currentPage,
-  setCurrentPage,
+export default function LikedPokemons({
+  userData,
   likedPokemons,
   unlikePokemon,
   likePokemon,
   currentUser,
 }) {
+  const filteredPokemons = userData?.pokemons?.filter((pokemon) =>
+    likedPokemons.includes(pokemon.id)
+  );
+
   return (
     <>
-      {JSON.stringify(pokemonList) !== "{}" ? (
+      {JSON.stringify(userData.pokemons) !== undefined ? (
         <>
           <Container>
-            {pokemonList.data?.map((pokemon) => (
+            {filteredPokemons?.map((pokemon) => (
               <Card
                 id={pokemon.id}
                 name={pokemon.name}
                 kind={pokemon.kind}
                 image_url={pokemon.image_url}
-                liked={likedPokemons?.includes(pokemon.id)}
+                liked={likedPokemons.includes(pokemon.id)}
                 unlikePokemon={unlikePokemon}
                 likePokemon={likePokemon}
                 currentUser={currentUser}
               />
             ))}
           </Container>
-          <Pagination
-            totalPages={pokemonList.size}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
         </>
       ) : (
         <Container>

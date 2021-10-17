@@ -1,40 +1,55 @@
 import { useEffect, useState } from "react";
-import { Route, Switch } from "react-router";
+import { Redirect, Route, Switch, useHistory } from "react-router";
 import axios from "axios";
-import styled from "styled-components";
 
+import useLocalStorage from "./hooks/useLocalStorage";
 import GlobalStyles from "./styles/GlobalStyles";
 
 import Home from "./pages/Home";
+import LikedPokemons from "./pages/LikedPokemons";
 
-import { Card } from "./components/Card";
 import Navbar from "./components/Navbar";
-import Pagination from "./components/Pagination";
-
 
 function App() {
   const [pokemonList, setPokemonList] = useState({});
   const [userData, setUserData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentUser, setCurrentUser] = useState("");
-  const [likedPokemons, setLikedPokemons] = useState([])
-  
+  const [currentUser, setCurrentUser] = useLocalStorage("", "currentUser");
+  const [likedPokemons, setLikedPokemons] = useState([]);
+
+  const history = useHistory();
 
   async function unlikePokemon(pokemonName, id) {
-  
-    await axios.delete(`https://pokedex20201.herokuapp.com/users/${currentUser}/starred/${pokemonName}`).then(response => console.log(response))
+    await axios
+      .delete(
+        `https://pokedex20201.herokuapp.com/users/${currentUser}/starred/${pokemonName}`
+      )
+      .then((response) => console.log(response));
 
-    const newArray = likedPokemons.filter(pokemonId => pokemonId !== id)
-    setLikedPokemons(newArray)
-
+    const newArray = likedPokemons.filter((pokemonId) => pokemonId !== id);
+    setLikedPokemons(newArray);
   }
 
   async function likePokemon(pokemonName, id) {
-    await axios.post(`https://pokedex20201.herokuapp.com/users/${currentUser}/starred/${pokemonName}`)
-    
-    const newArray = [...likedPokemons, id]
-    setLikedPokemons(newArray)
+    await axios.post(
+      `https://pokedex20201.herokuapp.com/users/${currentUser}/starred/${pokemonName}`
+    );
+
+    const newArray = [...likedPokemons, id];
+    setLikedPokemons(newArray);
   }
+
+  useEffect(() => {
+    const getDataUrl = `https://pokedex20201.herokuapp.com/users/${currentUser}`;
+
+    async function getUserData() {
+      const data = await axios.get(getDataUrl);
+
+      setUserData(data.data);
+      setLikedPokemons(data?.data?.pokemons?.map((pokemon) => pokemon.id));
+    }
+    getUserData();
+  }, [likedPokemons]);
 
   useEffect(() => {
     setPokemonList({});
@@ -65,7 +80,7 @@ function App() {
       const data = await axios.get(getDataUrl);
 
       setUserData(data.data);
-      setLikedPokemons(data.data.pokemons.map(pokemon => pokemon.id))
+      setLikedPokemons(data?.data?.pokemons?.map((pokemon) => pokemon.id));
     }
 
     if (currentUser) {
@@ -90,13 +105,33 @@ function App() {
               pokemonList={pokemonList}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
-              userData={userData}
+              currentUser={currentUser}
               likedPokemons={likedPokemons}
               unlikePokemon={unlikePokemon}
               likePokemon={likePokemon}
             />
           )}
         />
+        {currentUser && (
+          <Route
+            exact
+            path="/liked-pokemons"
+            render={() => (
+              <LikedPokemons
+                pokemonList={pokemonList}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                userData={userData}
+                currentUser={currentUser}
+                likedPokemons={likedPokemons}
+                unlikePokemon={unlikePokemon}
+                likePokemon={likePokemon}
+              />
+            )}
+          />
+        )}
+
+        <Route exact render={() => <Redirect to="/" />} />
       </Switch>
       <GlobalStyles />
     </>

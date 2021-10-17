@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useHistory, useLocation } from "react-router";
 import styled from "styled-components";
 
 const NavbarContainer = styled.div`
   position: fixed;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   z-index: 3;
 
   height: 7rem;
@@ -56,13 +58,22 @@ const Button = styled.button`
   }
 
   &:active {
+    transition: all 0.1s ease-in-out;
     box-shadow: none;
     filter: brightness(0.8);
   }
 `;
 
+const Flex = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export default function Navbar({ currentUser, setCurrentUser, setUserData }) {
   const [username, setUsername] = useState("");
+
+  const history = useHistory();
+  const { pathname } = useLocation();
 
   function handleSubmit() {
     setCurrentUser(username);
@@ -78,20 +89,44 @@ export default function Navbar({ currentUser, setCurrentUser, setUserData }) {
     <NavbarContainer>
       {currentUser ? (
         <>
-          <h1>{currentUser}</h1>
-          <Button onClick={handleLogout} secondary>
-            Sair
-          </Button>
+          <Flex>
+            <h1>{currentUser}</h1>
+            <Button onClick={handleLogout} secondary>
+              Sair
+            </Button>
+          </Flex>
+
+          {pathname === "/" ? (
+            <Button
+              onClick={() => {
+                window.scrollTo(0, 0);
+                history.push("/liked-pokemons");
+              }}
+            >
+              Favoritos
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                window.scrollTo(0, 0);
+                history.push("/");
+              }}
+            >
+              Voltar
+            </Button>
+          )}
         </>
       ) : (
-        <>
-          <Input
-            placeholder="Nome de usuário"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
-          <Button onClick={handleSubmit}>Login</Button>
-        </>
+        <Flex>
+          <form>
+            <Input
+              placeholder="Nome de usuário"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+            />
+            <Button onClick={handleSubmit}>Login</Button>
+          </form>
+        </Flex>
       )}
     </NavbarContainer>
   );
