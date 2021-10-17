@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Redirect, Route, Switch, useHistory } from "react-router";
+import { Redirect, Route, Switch } from "react-router";
 import axios from "axios";
 
 import useLocalStorage from "./hooks/useLocalStorage";

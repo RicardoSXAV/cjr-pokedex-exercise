@@ -35,6 +35,10 @@ const NavbarContainer = styled.div`
   @media (max-width: 520px) {
     padding: 2rem;
 
+    input {
+      width: 10rem;
+    }
+
     h1 {
       margin-right: 0.5rem;
     }
