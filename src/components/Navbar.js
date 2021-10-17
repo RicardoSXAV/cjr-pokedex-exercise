@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import styled from "styled-components";
 
+import { HiHeart } from "react-icons/hi";
+import useWindowDimensions from "../hooks/useWindowDimensions";
+import { MdKeyboardArrowRight } from "react-icons/md";
+
 const NavbarContainer = styled.div`
   position: fixed;
   display: flex;
@@ -26,6 +30,31 @@ const NavbarContainer = styled.div`
     margin-right: 2rem;
 
     color: white;
+  }
+
+  @media (max-width: 377px) {
+    justify-content: center;
+    padding: 1rem;
+    height: fit-content;
+
+    input {
+      width: 10rem;
+    }
+
+    button {
+      margin: 0.5rem;
+    }
+  }
+
+  @media (max-width: 293px) {
+    form {
+      display: flex;
+    }
+
+    .login-button {
+      margin: 0;
+      padding: 0.5rem 0.5rem 0 0.5rem;
+    }
   }
 `;
 
@@ -62,6 +91,20 @@ const Button = styled.button`
     box-shadow: none;
     filter: brightness(0.8);
   }
+
+  @media (max-width: 377px) {
+    padding: 0.5rem 1rem;
+  }
+
+  .mobile-heart {
+    display: flex;
+    font-size: 1.5rem;
+  }
+
+  .login-arrow {
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
 `;
 
 const Flex = styled.div`
@@ -74,6 +117,7 @@ export default function Navbar({ currentUser, setCurrentUser, setUserData }) {
 
   const history = useHistory();
   const { pathname } = useLocation();
+  const { width } = useWindowDimensions();
 
   function handleSubmit() {
     setCurrentUser(username);
@@ -89,7 +133,7 @@ export default function Navbar({ currentUser, setCurrentUser, setUserData }) {
     <NavbarContainer>
       {currentUser ? (
         <>
-          <Flex>
+          <Flex className="flex-div">
             <h1>{currentUser}</h1>
             <Button onClick={handleLogout} secondary>
               Sair
@@ -103,7 +147,11 @@ export default function Navbar({ currentUser, setCurrentUser, setUserData }) {
                 history.push("/liked-pokemons");
               }}
             >
-              Favoritos
+              {width > 377 ? (
+                <p>Favoritos</p>
+              ) : (
+                <HiHeart className="mobile-heart" />
+              )}
             </Button>
           ) : (
             <Button
@@ -124,7 +172,13 @@ export default function Navbar({ currentUser, setCurrentUser, setUserData }) {
               value={username}
               onChange={(event) => setUsername(event.target.value)}
             />
-            <Button onClick={handleSubmit}>Login</Button>
+            <Button className="login-button" onClick={handleSubmit}>
+              {width > 293 ? (
+                <p>Login</p>
+              ) : (
+                <MdKeyboardArrowRight className="login-arrow" />
+              )}
+            </Button>
           </form>
         </Flex>
       )}

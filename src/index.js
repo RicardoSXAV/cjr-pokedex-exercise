@@ -11,5 +11,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-
-const url = "https://pokedex20201.herokuapp.com";

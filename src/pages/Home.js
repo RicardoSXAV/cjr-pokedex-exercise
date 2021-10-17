@@ -50,6 +50,7 @@ export default function Home({
           <Container>
             {pokemonList.data?.map((pokemon) => (
               <Card
+                key={pokemon.id}
                 id={pokemon.id}
                 name={pokemon.name}
                 kind={pokemon.kind}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const PaginationWrapper = styled.div`
   display: flex;
@@ -58,8 +59,23 @@ const PaginationWrapper = styled.div`
   }
 
   @media (max-width: 589px) {
+    width: fit-content;
+    padding: 2rem 1.2rem;
+
     p {
       display: none;
+    }
+
+    button {
+      margin: 0 1rem;
+    }
+  }
+
+  @media (max-width: 300px) {
+    padding: 1rem;
+
+    button {
+      margin: 0.5rem;
     }
   }
 `;
@@ -94,8 +110,6 @@ const Button = styled.button`
     filter: brightness(0.8);
   }
 
-  // Mobile Adaptation
-
   @media (max-width: 900px) {
     width: 2.5rem;
     height: 2.5rem;
@@ -109,28 +123,34 @@ const Button = styled.button`
 `;
 
 const PaginationButton = styled.button`
-padding: 0.5rem 1rem;
+  padding: 0.5rem 1rem;
 
-font-weight: 600;
+  font-size: 1.3rem;
+  font-weight: 600;
   color: white;
- border-radius: 12px;
-    background: linear-gradient(
-      0deg,
-      rgba(34, 193, 195, 1) 0%,
-      rgba(45, 253, 88, 1) 100%
-    );
-    box-shadow: 0px 8px 20px 3px rgba(0, 0, 0, 0.24);
+  border-radius: 12px;
+  background: linear-gradient(
+    0deg,
+    rgba(34, 193, 195, 1) 0%,
+    rgba(45, 253, 88, 1) 100%
+  );
+  box-shadow: 0px 8px 20px 3px rgba(0, 0, 0, 0.24);
 
-    transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 
-    &:hover {
-      cursor: pointer;
-      filter: brightness(1.2);
-    }
+  &:hover {
+    cursor: pointer;
+    filter: brightness(1.2);
+  }
+
+  @media (max-width: 341px) {
+    font-size: 1rem;
+  }
 `;
 
 export default function Pagination(props) {
   const [rememberArray, setRememberArray] = useState([]);
+  const { width } = useWindowDimensions();
 
   let arrayOfPages = [];
 
@@ -187,7 +207,7 @@ export default function Pagination(props) {
 
   return (
     <PaginationWrapper>
-      {window.innerWidth > 589 ? (
+      {width > 589 ? (
         <MdKeyboardArrowLeft
           id="pagination-arrow"
           color="white"
@@ -196,7 +216,13 @@ export default function Pagination(props) {
           }
         />
       ) : (
-        <PaginationButton>Anterior</PaginationButton>
+        <PaginationButton
+          onClick={() =>
+            props.currentPage > 1 && props.setCurrentPage(props.currentPage - 1)
+          }
+        >
+          Anterior
+        </PaginationButton>
       )}
 
       {arrayOfPages.map((number, index) => (
@@ -206,28 +232,23 @@ export default function Pagination(props) {
             arrayOfPages[5] < props.totalPages - 1 && <p>. . .</p>}
 
           {props.currentPage === number ? (
-            <Button active onClick={() => props.setCurrentPage(number)}>
+            <Button
+              key={number}
+              active
+              onClick={() => props.setCurrentPage(number)}
+            >
               {number}
             </Button>
           ) : (
-            <Button onClick={() => props.setCurrentPage(number)}>
+            <Button key={number} onClick={() => props.setCurrentPage(number)}>
               {number}
             </Button>
           )}
-
-          {/*   <button
-            className={`pagination-button ${
-              props.currentPage === number && "active-button"
-            }`}
-            onClick={() => props.setCurrentPage(number)}
-          >
-            {number}
-          </button> */}
           {index + 1 === 1 && arrayOfPages[1] >= 4 && <p>. . .</p>}
         </>
       ))}
 
-      {window.innerWidth > 589 && (
+      {width > 589 ? (
         <MdKeyboardArrowRight
           id="pagination-arrow"
           color="white"
@@ -236,6 +257,15 @@ export default function Pagination(props) {
             props.setCurrentPage(props.currentPage + 1)
           }
         />
+      ) : (
+        <PaginationButton
+          onClick={() =>
+            props.currentPage < props.totalPages &&
+            props.setCurrentPage(props.currentPage + 1)
+          }
+        >
+          Próximo
+        </PaginationButton>
       )}
     </PaginationWrapper>
   );

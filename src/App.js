@@ -17,8 +17,6 @@ function App() {
   const [currentUser, setCurrentUser] = useLocalStorage("", "currentUser");
   const [likedPokemons, setLikedPokemons] = useState([]);
 
-  const history = useHistory();
-
   async function unlikePokemon(pokemonName, id) {
     await axios
       .delete(

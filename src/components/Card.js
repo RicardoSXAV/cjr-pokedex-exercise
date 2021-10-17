@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
-import { HiHeart, HiOutlineHeart } from "react-icons/hi";
+
 import { colors } from "../constants/colors";
 import capitalizeString from "../helpers/capitalizeString";
+import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 
 import pokeballIcon from "../assets/pokeball-icon.png";
 
@@ -109,6 +109,13 @@ const IconDiv = styled.button`
     box-shadow: none;
     filter: brightness(0.8);
   }
+
+  @media (max-width: 377px) {
+    top: 90%;
+    left: -5%;
+    font-size: 2rem;
+    padding: 1rem;
+  }
 `;
 
 export default function Card({
@@ -147,7 +154,11 @@ export default function Card({
       </div>
 
       <img src={image_url} alt={name} className="pokemon-image" />
-      <img src={pokeballIcon} className="pokeball-icon-background" />
+      <img
+        src={pokeballIcon}
+        alt="icon-background"
+        className="pokeball-icon-background"
+      />
     </Box>
   );
 }
