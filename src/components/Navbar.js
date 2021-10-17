@@ -32,10 +32,20 @@ const NavbarContainer = styled.div`
     color: white;
   }
 
+  @media (max-width: 520px) {
+    padding: 2rem;
+
+    h1 {
+      margin-right: 0.5rem;
+    }
+  }
+
   @media (max-width: 377px) {
     justify-content: center;
     padding: 1rem;
     height: fit-content;
+
+    border-radius: 0 0 20px 20px;
 
     input {
       width: 10rem;
@@ -134,7 +144,11 @@ export default function Navbar({ currentUser, setCurrentUser, setUserData }) {
       {currentUser ? (
         <>
           <Flex className="flex-div">
-            <h1>{currentUser}</h1>
+            <h1>
+              {currentUser.length < width / 45
+                ? currentUser
+                : `${currentUser.slice(0, width / 45)}...`}
+            </h1>
             <Button onClick={handleLogout} secondary>
               Sair
             </Button>

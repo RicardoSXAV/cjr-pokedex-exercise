@@ -47,7 +47,7 @@ function App() {
       setLikedPokemons(data?.data?.pokemons?.map((pokemon) => pokemon.id));
     }
     getUserData();
-  }, [likedPokemons]);
+  }, [currentUser]);
 
   useEffect(() => {
     setPokemonList({});
